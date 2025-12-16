@@ -140,21 +140,11 @@
 
         <div class="modal-images">
           <img :src="selectedCourt.image" :alt="selectedCourt.title" class="modal-main-image">
-          <img :src="selectedCourt.image2" :alt="selectedCourt.title" class="modal-main-image">
         </div>
 
         <div class="modal-body">
           <h2 class="modal-title">{{ selectedCourt.title }}</h2>
           <p class="modal-description">{{ selectedCourt.fullDescription }}</p>
-
-          <div class="modal-features">
-            <h3>Características</h3>
-            <ul>
-              <li v-for="(feature, index) in selectedCourt.features" :key="index">
-                {{ feature }}
-              </li>
-            </ul>
-          </div>
 
         </div>
       </div>
@@ -221,7 +211,24 @@
     </section>
 
     <footer id="contato">
-      <p>&copy; 2024 Beach Time. Todos os direitos reservados.</p>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Localização</h3>
+          <div class="address">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Rua Telyus Ferraz, 160, São Benedito<br>Parnaíba - PI, 64202-470<br>Brasil</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2024 Beach Time. Todos os direitos reservados.</p>
+          <div class="contact-links">
+            <a href="https://wa.me/558695807620" target="_blank" class="whatsapp-link">
+              <i class="fab fa-whatsapp"></i> Fale conosco pelo WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
     </footer>
   </div>
 </template>
@@ -256,7 +263,6 @@ export default {
         {
           title: 'Quadra Crescer',
           image: '/images/quadra1.jpg',
-          image2: '/images/quadra1.jpg',
           fullDescription: 'Quadra profissional com areia importada de alta qualidade, proporcionando a melhor experiência de jogo. Ideal para treinos e competições.',
           features: [
             'Areia importada premium',
@@ -265,12 +271,11 @@ export default {
             'Estacionamento privativo',
             'Área de descanso coberta'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         },
         {
           title: 'Quadra Exata',
           image: '/images/quadra2.jpg',
-          image2: '/images/quadra2.jpg',
           fullDescription: 'Quadra completa com boa estrutura, perfeita para jogos recreativos e treinos regulares. Excelente custo-benefício.',
           features: [
             'Areia de qualidade',
@@ -278,35 +283,32 @@ export default {
             'Estacionamento disponível',
             'Bebedouro'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         },
         {
           title: 'Quadra Fórmula Animal',
           image: '/images/quadra3.jpg',
-          image2: '/images/quadra3.jpg',
           fullDescription: 'Especializada em jogos noturnos com sistema de iluminação de última geração. Perfeita para quem joga após o trabalho.',
           features: [
             'Disponível até 23h',
             'Arena 16x8',
             'Vestiários completos'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         },
         {
           title: 'Quadra Laisa',
           image: '/images/quadra4.jpg',
-          image2: '/images/quadra4.jpg',
           fullDescription: 'Quadra premium preparada para torneios e eventos. Conta com arquibancada, placar eletrônico e toda infraestrutura necessária.',
           features: [
             'Placar eletrônico',
             'Sistema de som'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         },
         {
           title: 'Quadra Tron',
           image: '/images/quadra5.jpg',
-          image2: '/images/quadra5.jpg',
           fullDescription: 'Quadra exclusiva com acabamento premium e serviços diferenciados. Ideal para clientes que buscam o máximo em conforto e qualidade.',
           features: [
             'Areia especial importada',
@@ -315,12 +317,11 @@ export default {
             'Bebidas inclusas',
             'Estacionamento valet'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         },
         {
           title: 'Quadra 60 Minutos',
           image: '/images/quadra6.jpg',
-          image2: '/images/quadra6.jpg',
           fullDescription: 'Quadra pensada para toda a família, com área kids e espaço para confraternização. Perfeita para eventos familiares e comemorações.',
           features: [
             'Área kids segura',
@@ -329,7 +330,7 @@ export default {
             'Playground próximo',
             'Banheiro família'
           ],
-          whatsapp: '5586995797982'
+          whatsapp: '558695807620'
         }
       ],
       menuPhotos: [
@@ -490,7 +491,7 @@ export default {
     contactWhatsApp(court) {
       const userName = this.currentUser ? this.currentUser.name : 'Visitante'
       const message = `Olá! Meu nome é ${userName} e gostaria de saber sobre valores e formas de pagamento para a ${court.title}.`
-      const url = `https://wa.me/${court.whatsapp}?text=${encodeURIComponent(message)}`
+      const url = `https://wa.me/558695807620?text=${encodeURIComponent(message)}`
       window.open(url, '_blank')
     },
 
@@ -541,7 +542,7 @@ export default {
 }
 
 header {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
   color: white;
   padding: 1.5rem 0;
   position: sticky;
@@ -584,7 +585,7 @@ nav {
 }
 
 .nav-links a:hover {
-  color: #ff9933;
+  color: #94e432;
 }
 
 .nav-actions {
@@ -594,7 +595,7 @@ nav {
 }
 
 .user-name {
-  color: #ff9933;
+  color: #94e432;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -649,7 +650,7 @@ h1 {
 
 .subtitle {
   font-size: 1.3rem;
-  color: #ff9933;
+  color: #94e432;
   margin-bottom: 2rem;
   font-weight: 600;
   text-align: center;
@@ -720,7 +721,7 @@ h1 {
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #ff9933;
+  border-color: #94e432;
 }
 
 .btn-criar {
@@ -803,7 +804,7 @@ h1 {
 
 .aviso-date {
   background: #fff3e0;
-  color: #ff9933;
+  color: #94e432;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -859,11 +860,11 @@ h1 {
 }
 
 .success-message {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #000000;
+  color: #94e432;
   padding: 1rem;
   border-radius: 8px;
-  border-left: 4px solid #2e7d32;
+  border-left: 4px solid #94e432;
   margin-bottom: 1rem;
   font-size: 0.95rem;
 }
@@ -883,7 +884,7 @@ h1 {
   font-size: 2.5rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: #1a1a1a;
+  color: #94e432;
   font-weight: 700;
 }
 
@@ -894,7 +895,7 @@ h1 {
 }
 
 .product-card {
-  background: white;
+  background: #000000;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
@@ -905,7 +906,7 @@ h1 {
 
 .product-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(255, 153, 51, 0.2);
+  box-shadow: 0 15px 40px rgba(148, 228, 50, 0.2);
 }
 
 .product-image {
@@ -921,13 +922,13 @@ h1 {
 .product-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #94e432;
   margin-bottom: 0.8rem;
 }
 
 .product-dimensions {
   font-size: 0.95rem;
-  color: #666;
+  color: #94e432;
 }
 
 .modal-overlay {
@@ -945,7 +946,7 @@ h1 {
 }
 
 .modal-content {
-  background: white;
+  background: #000000;
   border-radius: 12px;
   max-width: 900px;
   width: 100%;
@@ -955,7 +956,7 @@ h1 {
 }
 
 .modal-content-menu {
-  background: white;
+  background: #000000;
   border-radius: 12px;
   max-width: 95%;
   width: auto;
@@ -978,8 +979,8 @@ h1 {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: #1a1a1a;
-  color: white;
+  background: #94e432;
+  color: #000000;
   border: none;
   width: 40px;
   height: 40px;
@@ -996,15 +997,18 @@ h1 {
 }
 
 .modal-images {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
 }
 
 .modal-main-image {
-  width: 100%;
-  height: 400px;
+  max-width: 100%;
+  max-height: 60vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -1016,19 +1020,19 @@ h1 {
 .modal-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #94e432;
   margin-bottom: 1rem;
 }
 
 .modal-description {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #666;
+  color: #94e432;
   margin-bottom: 2rem;
 }
 
 .modal-features {
-  background: #f8f8f8;
+  background: #000000;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
@@ -1036,7 +1040,7 @@ h1 {
 
 .modal-features h3 {
   font-size: 1.3rem;
-  color: #1a1a1a;
+  color: #94e432;
   margin-bottom: 1rem;
 }
 
@@ -1046,12 +1050,12 @@ h1 {
 
 .modal-features li {
   padding: 0.5rem 0;
-  color: #666;
+  color: #94e432;
 }
 
 .modal-features li:before {
   content: "✓ ";
-  color: #ff9933;
+  color: #94e432;
   font-weight: bold;
   margin-right: 0.5rem;
 }
@@ -1059,19 +1063,19 @@ h1 {
 .modal-payment {
   text-align: center;
   padding: 2rem;
-  background: #f8f8f8;
+  background: #000000;
   border-radius: 8px;
 }
 
 .modal-payment h3 {
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: #94e432;
   margin-bottom: 1rem;
 }
 
 .whatsapp-btn {
-  background: #25D366;
-  color: white;
+  background: #94e432;
+  color: #000000;
   padding: 1rem 3rem;
   border: none;
   border-radius: 50px;
@@ -1079,7 +1083,7 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 15px rgba(148, 228, 50, 0.3);
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
@@ -1087,13 +1091,13 @@ h1 {
 
 .whatsapp-btn:hover {
   transform: translateY(-3px);
-  background: #20BA5A;
+  background: #7bc02a;
 }
 
 .menu-section {
   padding: 3rem 0;
   margin-top: 3rem;
-  background: #f8f8f8;
+  background: #000000;
 }
 
 .menu-container {
@@ -1120,7 +1124,7 @@ h1 {
 }
 
 .carousel-btn {
-  background: #ff9933;
+  background: #94e432;
   color: white;
   border: none;
   width: 45px;
@@ -1137,7 +1141,7 @@ h1 {
 }
 
 .carousel-btn:hover:not(:disabled) {
-  background: #e88820;
+  background: #7bc02a;
   transform: scale(1.1);
 }
 
@@ -1177,7 +1181,7 @@ h1 {
 }
 
 .menu-card:hover {
-  border-color: #ff9933;
+  border-color: #94e432;
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(255, 153, 51, 0.15);
 }
@@ -1227,25 +1231,108 @@ h1 {
 }
 
 .dot.active {
-  background: #ff9933;
+  background: #94e432;
   width: 25px;
   border-radius: 5px;
 }
 
 .dot:hover {
-  background: #ffb366;
+  background: #a9e85e;
 }
 
 footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
   color: white;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem 2rem;
   margin-top: 5rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
   text-align: center;
 }
 
-footer p {
+.footer-section {
+  margin-bottom: 2.5rem;
+}
+
+.footer-section h3 {
+  color: #94e432;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.footer-section h3:after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 2px;
+  background: #94e432;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.address {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.address i {
+  font-size: 2rem;
+  color: #94e432;
+}
+
+.address p {
   color: #b8b8b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+  color: #b8b8b8;
+  margin-bottom: 1.5rem;
+}
+
+.contact-links {
+  margin-top: 1.5rem;
+}
+
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #94e432;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(148, 228, 50, 0.3);
+}
+
+.whatsapp-link:hover {
+  background: #7bc02a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(148, 228, 50, 0.4);
+}
+
+.whatsapp-link i {
+  font-size: 1.2rem;
 }
 
 @media (max-width: 1200px) {

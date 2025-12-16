@@ -118,16 +118,16 @@
       <section class="meus-agendamentos-section">
    <div class="section-header">
      <h2>{{ currentUser?.isAdmin ? 'Agendamentos Confirmados' : 'Meus Agendamentos' }}</h2>
-     
-     <button 
-       @click="limparHistorico" 
+
+     <button
+       @click="limparHistorico"
        class="btn-limpar-historico"
        :disabled="loadingAgendamentos || agendamentos.length === 0"
      >
        🗑️ Limpar Histórico
      </button>
    </div>
-   
+
    <div v-if="loadingAgendamentos" class="loading">Carregando...</div>
    <div v-else-if="agendamentos.length === 0" class="no-agendamentos">
      <p>{{ currentUser?.isAdmin ? 'Nenhum agendamento confirmado no sistema.' : 'Você ainda não possui agendamentos.' }}</p>
@@ -148,8 +148,8 @@
          <div class="agendamento-price">R$ {{ agendamento.precoTotal.toFixed(2) }}</div>
          <div class="agendamento-status">Status: {{ agendamento.status }}</div>
          <div v-if="agendamento.observacoes" class="agendamento-obs">Obs: {{ agendamento.observacoes }}</div>
-         
-         <button 
+
+         <button
            v-if="!currentUser?.isAdmin && agendamento.status === 'confirmado'"
            @click="fazerPagamento(agendamento)"
            class="btn-pagamento"
@@ -265,7 +265,7 @@ export default {
     if (this.currentUser.isAdmin) {
       const todosAgendamentos = await dbService.getAllAgendamentos()
       const confirmados = todosAgendamentos.filter(ag => ag.status === 'confirmado')
-      
+
       const agendamentosComNomes = await Promise.all(
         confirmados.map(async (ag) => {
           try {
@@ -290,10 +290,10 @@ export default {
       })
 
       this.todosAgendamentos = todosAgendamentos
-    } 
+    }
     else {
       const userAgendamentos = await dbService.getAgendamentosByUserId(this.currentUser.id)
-      
+
       this.agendamentos = userAgendamentos.sort((a, b) => {
         const dateA = new Date(a.data + 'T' + a.hora)
         const dateB = new Date(b.data + 'T' + b.hora)
@@ -311,7 +311,7 @@ export default {
     this.loadingAgendamentos = false
   }
 },
-    
+
     isSlotOccupied(date, hora) {
       if (this.selectedQuadras.length === 0) return false
 
@@ -332,10 +332,10 @@ export default {
 
       try {
         const horaString = `${this.selectedSlot.hora.toString().padStart(2, '0')}:00`
-        
+
         const hasConflict = await dbService.checkConflict(
-          this.selectedSlot.date, 
-          horaString, 
+          this.selectedSlot.date,
+          horaString,
           this.selectedQuadras
         )
 
@@ -380,7 +380,7 @@ export default {
   const mensagem = this.currentUser.isAdmin
     ? 'Isso irá deletar TODOS os agendamentos que já passaram. Confirma?'
     : 'Isso irá deletar seus agendamentos cancelados e que já passaram. Confirma?'
-  
+
   if (!confirm(mensagem)) return
 
   this.isLoading = true
@@ -395,7 +395,7 @@ export default {
     }
 
     this.showSuccessModal(
-      'Histórico limpo!', 
+      'Histórico limpo!',
       `${deletados} agendamento(s) foram deletados.`
     )
 
@@ -414,7 +414,7 @@ fazerPagamento(agendamento) {
   const data = this.formatDate(agendamento.data)
   const hora = agendamento.hora
   const valor = agendamento.precoTotal.toFixed(2)
-  
+
   const message = `Olá! Meu nome é ${userName}.
 
 Gostaria de saber as formas de pagamento para o seguinte agendamento:
@@ -425,8 +425,8 @@ Gostaria de saber as formas de pagamento para o seguinte agendamento:
 💰 Valor: R$ ${valor}
 
 Aguardo retorno!`
-  
-  const whatsapp = '5586995797982'
+
+  const whatsapp = '558695807620'
   const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`
   window.open(url, '_blank')
 },
@@ -436,13 +436,13 @@ Aguardo retorno!`
 
       try {
         const agendamento = await dbService.getAgendamentoById(agendamentoId)
-        
+
         if (agendamento) {
           agendamento.status = 'cancelado'
           await dbService.updateAgendamento(agendamento)
 
           this.showSuccessModal('Agendamento cancelado', 'Seu agendamento foi cancelado com sucesso.')
-          
+
           await this.loadAgendamentos()
         }
       } catch (error) {
@@ -498,7 +498,7 @@ Aguardo retorno!`
         this.showErrorModal('Selecione as quadras', 'Por favor, selecione pelo menos uma quadra antes de escolher o horário.')
         return
       }
-      
+
       if (this.isSlotOccupied(date, hora)) {
         this.showErrorModal('Horário indisponível', 'Uma ou mais quadras selecionadas já estão ocupadas neste horário.')
         return
@@ -525,11 +525,11 @@ Aguardo retorno!`
 
     getSlotStatus(date, hora) {
       if (this.selectedQuadras.length === 0) return 'Selecione quadras'
-      
+
       if (this.isSlotOccupied(date, hora)) {
         return 'Ocupado'
       }
-      
+
       return 'Disponível'
     },
 

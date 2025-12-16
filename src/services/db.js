@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 const DB_NAME = 'BeachTimeDB'
 const DB_VERSION = 2
 const STORES = {
@@ -26,24 +27,24 @@ class DatabaseService {
         const db = event.target.result
 
         if (!db.objectStoreNames.contains(STORES.USERS)) {
-          const usersStore = db.createObjectStore(STORES.USERS, { 
+          const usersStore = db.createObjectStore(STORES.USERS, {
             keyPath: 'id',
-            autoIncrement: true 
+            autoIncrement: true
           })
           usersStore.createIndex('email', 'email', { unique: true })
         }
 
         if (!db.objectStoreNames.contains(STORES.AVISOS)) {
-          const avisosStore = db.createObjectStore(STORES.AVISOS, { 
+          const avisosStore = db.createObjectStore(STORES.AVISOS, {
             keyPath: 'id',
-            autoIncrement: true 
+            autoIncrement: true
           })
           avisosStore.createIndex('createdAt', 'createdAt', { unique: false })
         }
 
         if (!db.objectStoreNames.contains(STORES.AGENDAMENTOS)) {
-          const agendamentosStore = db.createObjectStore(STORES.AGENDAMENTOS, { 
-            keyPath: 'id' 
+          const agendamentosStore = db.createObjectStore(STORES.AGENDAMENTOS, {
+            keyPath: 'id'
           })
           agendamentosStore.createIndex('userId', 'userId', { unique: false })
           agendamentosStore.createIndex('data', 'data', { unique: false })
@@ -63,7 +64,7 @@ class DatabaseService {
   async register(name, email, password) {
     try {
       const db = await this.ensureDB()
-      
+
       const existingUser = await this.getUserByEmail(email)
       if (existingUser) {
         throw new Error('Email já cadastrado')
@@ -72,7 +73,7 @@ class DatabaseService {
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.USERS], 'readwrite')
         const store = transaction.objectStore(STORES.USERS)
-        
+
         const user = {
           name,
           email,
@@ -80,7 +81,7 @@ class DatabaseService {
           isAdmin: false,
           createdAt: new Date().toISOString()
         }
-        
+
         const request = store.add(user)
 
         request.onsuccess = () => {
@@ -98,7 +99,7 @@ class DatabaseService {
   async login(email, password) {
     try {
       const user = await this.getUserByEmail(email)
-      
+
       if (!user) {
         throw new Error('Usuário não encontrado')
       }
@@ -107,6 +108,7 @@ class DatabaseService {
         throw new Error('Senha incorreta')
       }
 
+      // eslint-disable-next-line no-unused-vars
       const { password: _, ...userWithoutPassword } = user
       return userWithoutPassword
     } catch (error) {
@@ -117,12 +119,12 @@ class DatabaseService {
   async getUserByEmail(email) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.USERS], 'readonly')
         const store = transaction.objectStore(STORES.USERS)
         const index = store.index('email')
-        
+
         const request = index.get(email)
 
         request.onsuccess = () => resolve(request.result || null)
@@ -136,16 +138,17 @@ class DatabaseService {
   async getUserById(id) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.USERS], 'readonly')
         const store = transaction.objectStore(STORES.USERS)
-        
+
         const request = store.get(id)
 
         request.onsuccess = () => {
           const user = request.result
           if (user) {
+            // eslint-disable-next-line no-unused-vars
             const { password: _, ...userWithoutPassword } = user
             resolve(userWithoutPassword)
           } else {
@@ -162,11 +165,11 @@ class DatabaseService {
   async createAviso(titulo, descricao, adminId, adminName) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AVISOS], 'readwrite')
         const store = transaction.objectStore(STORES.AVISOS)
-        
+
         const aviso = {
           titulo,
           descricao,
@@ -174,7 +177,7 @@ class DatabaseService {
           adminName,
           createdAt: new Date().toISOString()
         }
-        
+
         const request = store.add(aviso)
 
         request.onsuccess = () => {
@@ -192,16 +195,16 @@ class DatabaseService {
   async getAllAvisos() {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AVISOS], 'readonly')
         const store = transaction.objectStore(STORES.AVISOS)
-        
+
         const request = store.getAll()
 
         request.onsuccess = () => {
           const avisos = request.result || []
-         
+
           avisos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           resolve(avisos)
         }
@@ -216,11 +219,11 @@ class DatabaseService {
   async deleteAviso(id) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AVISOS], 'readwrite')
         const store = transaction.objectStore(STORES.AVISOS)
-        
+
         const request = store.delete(id)
 
         request.onsuccess = () => resolve(true)
@@ -234,11 +237,11 @@ class DatabaseService {
   async createAgendamento(agendamento) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readwrite')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
-        
+
         const request = store.add(agendamento)
 
         request.onsuccess = () => resolve(agendamento)
@@ -252,11 +255,11 @@ class DatabaseService {
   async getAllAgendamentos() {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readonly')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
-        
+
         const request = store.getAll()
 
         request.onsuccess = () => resolve(request.result || [])
@@ -270,12 +273,12 @@ class DatabaseService {
   async getAgendamentosByUserId(userId) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readonly')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
         const index = store.index('userId')
-        
+
         const request = index.getAll(userId)
 
         request.onsuccess = () => resolve(request.result || [])
@@ -289,11 +292,11 @@ class DatabaseService {
   async getAgendamentoById(id) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readonly')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
-        
+
         const request = store.get(id)
 
         request.onsuccess = () => resolve(request.result || null)
@@ -307,11 +310,11 @@ class DatabaseService {
   async updateAgendamento(agendamento) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readwrite')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
-        
+
         const request = store.put(agendamento)
 
         request.onsuccess = () => resolve(agendamento)
@@ -325,11 +328,11 @@ class DatabaseService {
   async deleteAgendamento(id) {
     try {
       const db = await this.ensureDB()
-      
+
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORES.AGENDAMENTOS], 'readwrite')
         const store = transaction.objectStore(STORES.AGENDAMENTOS)
-        
+
         const request = store.delete(id)
 
         request.onsuccess = () => resolve(true)
@@ -343,14 +346,14 @@ class DatabaseService {
   async checkConflict(data, hora, quadraIds, excludeId = null) {
     try {
       const allAgendamentos = await this.getAllAgendamentos()
-      
+
       return allAgendamentos.some(ag => {
         if (excludeId && ag.id === excludeId) return false
-        
+
         if (ag.data === data && ag.hora === hora && ag.status === 'confirmado') {
           return quadraIds.some(quadraId => ag.quadraIds.includes(quadraId))
         }
-        
+
         return false
       })
     } catch (error) {
@@ -384,20 +387,20 @@ class DatabaseService {
   async clearAllData() {
     try {
       const db = await this.ensureDB()
-      
+
       const stores = [STORES.USERS, STORES.AVISOS, STORES.AGENDAMENTOS]
-      
+
       for (const storeName of stores) {
         await new Promise((resolve, reject) => {
           const transaction = db.transaction([storeName], 'readwrite')
           const store = transaction.objectStore(storeName)
           const request = store.clear()
-          
+
           request.onsuccess = () => resolve()
           request.onerror = () => reject()
         })
       }
-      
+
       console.log('✅ Todos os dados foram limpos')
       return true
     } catch (error) {
@@ -411,20 +414,20 @@ async limparHistoricoUsuario(userId) {
     const agendamentos = await this.getAgendamentosByUserId(userId)
     const hoje = new Date()
     hoje.setHours(0, 0, 0, 0)
-    
+
     let deletados = 0
-    
+
     for (const ag of agendamentos) {
       const dataAgendamento = new Date(ag.data + 'T00:00:00')
       const jaPassou = dataAgendamento < hoje
       const foiCancelado = ag.status === 'cancelado'
-      
+
       if (jaPassou || foiCancelado) {
         await this.deleteAgendamento(ag.id)
         deletados++
       }
     }
-    
+
     return deletados
   } catch (error) {
     console.error('Erro ao limpar histórico:', error)
@@ -437,19 +440,19 @@ async limparHistoricoGeral() {
     const todosAgendamentos = await this.getAllAgendamentos()
     const hoje = new Date()
     hoje.setHours(0, 0, 0, 0)
-    
+
     let deletados = 0
-    
+
     for (const ag of todosAgendamentos) {
       const dataAgendamento = new Date(ag.data + 'T00:00:00')
       const jaPassou = dataAgendamento < hoje
-      
+
       if (jaPassou) {
         await this.deleteAgendamento(ag.id)
         deletados++
       }
     }
-    
+
     return deletados
   } catch (error) {
     console.error('Erro ao limpar histórico geral:', error)
@@ -461,14 +464,14 @@ async limparHistoricoGeral() {
     try {
       const adminEmail = 'admin@beachtime.com'
       const existingAdmin = await this.getUserByEmail(adminEmail)
-      
+
       if (!existingAdmin) {
         const db = await this.ensureDB()
-        
+
         return new Promise((resolve, reject) => {
           const transaction = db.transaction([STORES.USERS], 'readwrite')
           const store = transaction.objectStore(STORES.USERS)
-          
+
           const admin = {
             name: 'Administrador',
             email: adminEmail,
@@ -476,7 +479,7 @@ async limparHistoricoGeral() {
             isAdmin: true,
             createdAt: new Date().toISOString()
           }
-          
+
           const request = store.add(admin)
 
           request.onsuccess = () => {
@@ -488,7 +491,7 @@ async limparHistoricoGeral() {
           request.onerror = () => reject(new Error('Erro ao criar admin'))
         })
       }
-      
+
       return existingAdmin
     } catch (error) {
       console.error('Erro ao criar admin:', error)
